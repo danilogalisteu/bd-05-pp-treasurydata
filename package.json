@@ -1,0 +1,23 @@
+{
+  "name": "treasurydata",
+  "version": "1.0.0",
+  "description": "Personal project: > Build a personal project on your own, completely from scratch, then submit it to the community for feedback. You're allowed to use any languages and frameworks you want, but you must build it yourself. The purpose of this project is two-fold: a chance to put your skills into practice and to add another project to your portfolio. Well-built personal projects will help you land interviews and jobs, so make sure to put in the effort!",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danilogalisteu/bd-05-pp-treasurydata.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danilogalisteu/bd-05-pp-treasurydata/issues"
+  },
+  "homepage": "https://github.com/danilogalisteu/bd-05-pp-treasurydata#readme",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
