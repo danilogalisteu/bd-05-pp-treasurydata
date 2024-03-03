@@ -1,64 +1,50 @@
 
-async function getTreasuryTable(verbose=false) {
-    const treasuryTableJSONURL = 'https://www.tesourodireto.com.br/json/br/com/b3/tesourodireto/service/api/treasurybondsinfo.json'
+async function fetchResponse(url, contentType='text/html', options={}, verbose=false) {
     try {
         if (verbose) {
-            console.log(`fetching ${treasuryTableJSONURL}...`)
+            console.log(`fetching ${url}...`)
         }
-        const response = await fetch(treasuryTableJSONURL)
+        const response = await fetch(url, options)
         const status = response.status
         if (status >= 400) {
             if (verbose) {
-                console.log(`fetch response error on ${treasuryTableJSONURL}: ${status}`)
+                console.log(`fetch response error on ${url}: ${status}`)
             }
-            return pages
+            return
         }
         const ctype = response.headers.get('content-type')
-        if (!ctype.includes('application/json')) {
+        if (!ctype.includes(contentType)) {
             if (verbose) {
-                console.log(`fetch content error on ${treasuryTableJSONURL}: ${ctype}`)
+                console.log(`fetch content error on ${url}: ${ctype}`)
             }
-            return pages
+            return
         }
-        const content = await response.json()
-        console.log(`Content:\n${JSON.stringify(content, null, 4)}`)
+        return response
     }
     catch (err) {
         if (verbose) {
-            console.log(`fetch error on ${treasuryTableJSONURL}: ${err}`)
+            console.log(`fetch error on ${url}: ${err}`)
         }
+    }
+}
+
+
+async function getTreasuryTable(verbose=false) {
+    const treasuryTableJSONURL = 'https://www.tesourodireto.com.br/json/br/com/b3/tesourodireto/service/api/treasurybondsinfo.json'
+    const response = await fetchResponse(treasuryTableJSONURL, 'application/json', {}, verbose)
+    if (response) {
+        const content = await response.json()
+        console.log(`Content:\n${JSON.stringify(content, null, 4)}`)
     }
 }
 
 
 async function getTreasuryPriceHistory(code, period=30, verbose=false) {
     const treasuryPriceHistoryJSONURL = `https://www.tesourodireto.com.br/b3/tesourodireto/pricesAndFeesHistory?codigo=${code}&periodo=${period}`
-    try {
-        if (verbose) {
-            console.log(`fetching ${treasuryPriceHistoryJSONURL}...`)
-        }
-        const response = await fetch(treasuryPriceHistoryJSONURL)
-        const status = response.status
-        if (status >= 400) {
-            if (verbose) {
-                console.log(`fetch response error on ${treasuryPriceHistoryJSONURL}: ${status}`)
-            }
-            return pages
-        }
-        const ctype = response.headers.get('content-type')
-        if (!ctype.includes('application/json')) {
-            if (verbose) {
-                console.log(`fetch content error on ${treasuryPriceHistoryJSONURL}: ${ctype}`)
-            }
-            return pages
-        }
+    const response = await fetchResponse(treasuryPriceHistoryJSONURL, 'application/json', {}, verbose)
+    if (response) {
         const content = await response.json()
         console.log(`Content:\n${JSON.stringify(content, null, 4)}`)
-    }
-    catch (err) {
-        if (verbose) {
-            console.log(`fetch error on ${treasuryPriceHistoryJSONURL}: ${err}`)
-        }
     }
 }
 
