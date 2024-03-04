@@ -31,7 +31,7 @@ function parseTreasuryTable(content) {
 }
 
 
-async function getTreasuryTable(verbose=false) {
+async function getTreasuryTable() {
     const treasuryHomeURL = 'https://www.tesourodireto.com.br/titulos/precos-e-taxas.htm'
     const treasuryDataURL = `https://www.tesourodireto.com.br/json/br/com/b3/tesourodireto/service/api/treasurybondsinfo.json`
 
@@ -80,7 +80,7 @@ function parseTreasuryPriceHistory(content) {
 }
 
 
-async function getTreasuryPriceHistory(code, period=30, verbose=false) {
+async function getTreasuryPriceHistory(code, period=30) {
     const treasuryHistURL = 'https://www.tesourodireto.com.br/titulos/historico-de-precos-e-taxas.htm'
     const treasuryDataURL = `https://www.tesourodireto.com.br/b3/tesourodireto/pricesAndFeesHistory`
 
