@@ -19,5 +19,8 @@
   "homepage": "https://github.com/danilogalisteu/bd-05-pp-treasurydata#readme",
   "devDependencies": {
     "jest": "^29.7.0"
+  },
+  "dependencies": {
+    "puppeteer": "^22.3.0"
   }
 }
