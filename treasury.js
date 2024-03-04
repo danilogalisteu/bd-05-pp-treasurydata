@@ -21,9 +21,9 @@ function parseTreasuryTable(content) {
                 element['TrsrBd']['isinCd'],
                 element['TrsrBd']['FinIndxs']['nm'],
                 element['TrsrBdType']['nm'],
-                element['TrsrBd']['featrs'],
-                element['TrsrBd']['invstmtStbl'],
-                element['TrsrBd']['rcvgIncm'],
+                element['TrsrBd']['featrs']      ? element['TrsrBd']['featrs'].trim()      : "",
+                element['TrsrBd']['invstmtStbl'] ? element['TrsrBd']['invstmtStbl'].trim() : "",
+                element['TrsrBd']['rcvgIncm']    ? element['TrsrBd']['rcvgIncm'].trim()    : "",
             ])
         }
     )
