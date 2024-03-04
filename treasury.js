@@ -5,22 +5,22 @@ const puppeteer = require("puppeteer")
 function parseTreasuryTable(content) {
     const bondDataObj = content['response']['TrsrBdTradgList']
     const bondDataArray = [
-        ['code', 'name', 'maturity', 'coupon', 'bid', 'ask', 'bidRate', 'askRate', 'isin', 'index', 'typeName'],
+        ['index', 'typeName', 'name', 'maturity', 'coupon', 'bid', 'ask', 'bidRate', 'askRate', 'isin', 'code', 'info', 'objective', 'income'],
     ]
     bondDataObj.forEach(
         (element, index, array) => {
             bondDataArray.push([
-                element['TrsrBd']['cd'],
+                element['TrsrBd']['FinIndxs']['nm'],
+                element['TrsrBdType']['nm'],
                 element['TrsrBd']['nm'],
-                element['TrsrBd']['mtrtyDt'],
-                element['TrsrBd']['semiAnulIntrstInd'],
+                element['TrsrBd']['mtrtyDt'].slice(0, 10),
+                element['TrsrBd']['semiAnulIntrstInd'] ? 'Y' : 'N',
                 element['TrsrBd']['untrRedVal'],
                 element['TrsrBd']['untrInvstmtVal'],
                 element['TrsrBd']['anulRedRate'],
                 element['TrsrBd']['anulInvstmtRate'],
                 element['TrsrBd']['isinCd'],
-                element['TrsrBd']['FinIndxs']['nm'],
-                element['TrsrBdType']['nm'],
+                element['TrsrBd']['cd'],
                 element['TrsrBd']['featrs']      ? element['TrsrBd']['featrs'].trim()      : "",
                 element['TrsrBd']['invstmtStbl'] ? element['TrsrBd']['invstmtStbl'].trim() : "",
                 element['TrsrBd']['rcvgIncm']    ? element['TrsrBd']['rcvgIncm'].trim()    : "",
@@ -49,9 +49,9 @@ async function getTreasuryTable(verbose=false) {
 
     const dataObj = JSON.parse(content)
     const marketDataObj = {
-        openTime: dataObj['response']['TrsrBondMkt']['opngDtTm'],
-        closeTime: dataObj['response']['TrsrBondMkt']['clsgDtTm'],
-        quoteTime: dataObj['response']['TrsrBondMkt']['qtnDtTm'],
+        quoteTime: dataObj['response']['TrsrBondMkt']['qtnDtTm'].replace('T', ' '),
+        openTime: dataObj['response']['TrsrBondMkt']['opngDtTm'].replace('T', ' '),
+        closeTime: dataObj['response']['TrsrBondMkt']['clsgDtTm'].replace('T', ' '),
         statusCode: dataObj['response']['TrsrBondMkt']['stsCd'],
         status: dataObj['response']['TrsrBondMkt']['sts'],
     }
