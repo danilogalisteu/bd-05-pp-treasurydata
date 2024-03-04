@@ -50,8 +50,7 @@ async function getTreasuryTable(verbose=false) {
     const dataObj = JSON.parse(content)
     const marketDataObj = dataObj['response']['TrsrBondMkt']
     console.log(JSON.stringify(marketDataObj, null, 4))
-    const bondDataArray = parseTreasuryTable(dataObj)
-    console.log(JSON.stringify(bondDataArray, null, 4))
+    return parseTreasuryTable(dataObj)
 }
 
 
@@ -101,8 +100,7 @@ async function getTreasuryPriceHistory(code, period=30, verbose=false) {
     await browser.close()
 
     const dataObj = JSON.parse(content)
-    const priceHistoryArray = parseTreasuryPriceHistory(dataObj)
-    console.log(JSON.stringify(priceHistoryArray, null, 4))
+    return parseTreasuryPriceHistory(dataObj)
 }
 
 
