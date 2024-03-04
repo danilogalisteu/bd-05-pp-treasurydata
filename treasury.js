@@ -5,7 +5,7 @@ const puppeteer = require("puppeteer")
 function parseTreasuryTable(content) {
     const bondDataObj = content['response']['TrsrBdTradgList']
     const bondDataArray = [
-        ['index', 'typeName', 'name', 'maturity', 'coupon', 'bid', 'ask', 'bidRate', 'askRate', 'isin', 'code', 'info', 'objective', 'income'],
+        ['Index', 'Type', 'Name', 'Maturity', 'Coupon', 'Bid Price', 'Ask Price', 'Bid Rate', 'Ask Rate', 'ISIN', 'Code', 'Info', 'Bbjective', 'Income'],
     ]
     bondDataObj.forEach(
         (element, index, array) => {
