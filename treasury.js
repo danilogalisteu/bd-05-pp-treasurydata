@@ -91,11 +91,11 @@ async function getTreasuryPriceHistory(code, period=30, verbose=false) {
     const items = await page.$$('#ul-list > li')
     const itemPos = attr.indexOf(code.toString())
     const itemElement = items[itemPos]
-    itemElement.click()
 
-    const dataResponse = await page.waitForResponse(
-        (response) => response.url().startsWith(treasuryDataURL)
-    )
+    const [dataResponse] = await Promise.all([
+        page.waitForResponse((response) => response.url().startsWith(treasuryDataURL), {timeout: 90_000}),
+        itemElement.click(),
+    ]);
 
     const content = await dataResponse.text()
     await browser.close()
