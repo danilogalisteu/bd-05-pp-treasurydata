@@ -57,7 +57,7 @@ async function getTreasuryTable(verbose=false) {
 function parseTreasuryPriceHistory(content) {
     const priceHistoryObj = content['response']['TrsrBd']['PrcgLst']
     const priceHistoryArray = [
-        ['code', 'timeOpen', 'timeClose', 'bid', 'ask', 'bidRate', 'askRate'],
+        ['timeOpen', 'timeClose', 'bid', 'ask', 'bidRate', 'askRate'],
     ]
     priceHistoryObj.forEach(
         (element, index, array) => {
