@@ -48,9 +48,14 @@ async function getTreasuryTable(verbose=false) {
     await browser.close()
 
     const dataObj = JSON.parse(content)
-    const marketDataObj = dataObj['response']['TrsrBondMkt']
-    console.log(JSON.stringify(marketDataObj, null, 4))
-    return parseTreasuryTable(dataObj)
+    const marketDataObj = {
+        openTime: dataObj['response']['TrsrBondMkt']['opngDtTm'],
+        closeTime: dataObj['response']['TrsrBondMkt']['clsgDtTm'],
+        quoteTime: dataObj['response']['TrsrBondMkt']['qtnDtTm'],
+        statusCode: dataObj['response']['TrsrBondMkt']['stsCd'],
+        status: dataObj['response']['TrsrBondMkt']['sts'],
+    }
+    return [marketDataObj, parseTreasuryTable(dataObj)]
 }
 
 
