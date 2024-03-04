@@ -32,16 +32,16 @@ function parseTreasuryTable(content) {
 
 
 async function getTreasuryTable(verbose=false) {
+    const treasuryHomeURL = 'https://www.tesourodireto.com.br/titulos/precos-e-taxas.htm'
+    const treasuryDataURL = `https://www.tesourodireto.com.br/json/br/com/b3/tesourodireto/service/api/treasurybondsinfo.json`
+
     const browser = await puppeteer.launch({headless: true})
     const page = await browser.newPage()
     page.setViewport({width: 1600, height: 900})
 
-    const treasuryHomeURL = 'https://www.tesourodireto.com.br/titulos/precos-e-taxas.htm'
-    const treasuryDataURL = `https://www.tesourodireto.com.br/json/br/com/b3/tesourodireto/service/api/treasurybondsinfo.json`
-
     const [dataResponse] = await Promise.all([
         page.waitForResponse((response) => response.url().startsWith(treasuryDataURL), {timeout: 90_000}),
-        page.goto(treasuryHomeURL, {waitUntil: "domcontentloaded"}),
+        page.goto(treasuryHomeURL, {waitUntil: "load"}),
     ]);
 
     const content = await dataResponse.text()
@@ -77,12 +77,12 @@ function parseTreasuryPriceHistory(content) {
 
 
 async function getTreasuryPriceHistory(code, period=30, verbose=false) {
+    const treasuryHistURL = 'https://www.tesourodireto.com.br/titulos/historico-de-precos-e-taxas.htm'
+    const treasuryDataURL = `https://www.tesourodireto.com.br/b3/tesourodireto/pricesAndFeesHistory`
+
     const browser = await puppeteer.launch({headless: true})
     const page = await browser.newPage()
     page.setViewport({width: 1600, height: 900})
-
-    const treasuryHistURL = 'https://www.tesourodireto.com.br/titulos/historico-de-precos-e-taxas.htm'
-    const treasuryDataURL = `https://www.tesourodireto.com.br/b3/tesourodireto/pricesAndFeesHistory`
 
     await page.goto(treasuryHistURL, {waitUntil: 'load'})
     await page.click('div.td-form-select-input > div')
