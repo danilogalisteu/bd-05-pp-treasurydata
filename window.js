@@ -16,10 +16,10 @@ async function updateTreasuryData() {
 
     colorMarket = marketDataObj['status'] == 'Aberto' ? 'green' : 'red'
     stringMarket =
-        `Status {${colorMarket}-fg}${marketDataObj['status']} [${marketDataObj['statusCode']}]{/${colorMarket}-fg}` + '\n' +
-        `Last   ${marketDataObj['quoteTime']}` + '\n' +
-        `Open   ${marketDataObj['openTime']}` + '\n' +
-        `Close  ${marketDataObj['closeTime']}`
+        `{bold}Status{/bold} {${colorMarket}-fg}${marketDataObj['status']} [${marketDataObj['statusCode']}]{/${colorMarket}-fg}` + '\n' +
+        `{bold}Last{/bold}   ${marketDataObj['quoteTime']}` + '\n' +
+        `{bold}Open{/bold}   ${marketDataObj['openTime']}` + '\n' +
+        `{bold}Close{/bold}  ${marketDataObj['closeTime']}`
     boxMarket.setContent(stringMarket)
 
     const tableDataDF = bondDataDF.loc({columns: [
@@ -35,16 +35,17 @@ async function updateTreasuryInfo() {
     const indexTable = tableBonds.rows.selected
     const infoBond = bondDataDF.iloc({rows: [indexTable]})
     const stringBond =
-        `Bond       ${infoBond['Type'].values[0]} ${infoBond['Maturity'].values[0]}` + '\n' +
-        `Code       ${infoBond['Code'].values[0]}` + '\n' +
-        `ISIN       ${infoBond['ISIN'].values[0]}` + '\n\n' +
-        `Bid Price  ${infoBond['Bid Price'].values[0]}` + '\n' +
-        `Ask Price  ${infoBond['Ask Price'].values[0]}` + '\n' +
-        `Bid Rate   ${infoBond['Bid Rate'].values[0]}` + '\n' +
-        `Ask Rate   ${infoBond['Ask Rate'].values[0]}` + '\n\n' +
-        `Info       ${infoBond['Info'].values[0]}` + '\n\n' +
-        `Objective  ${infoBond['Objective'].values[0]}` + '\n\n' +
-        `Income     ${infoBond['Income'].values[0]}`
+        `{bold}Bond{/bold}       ${infoBond['Type'].values[0]} ${infoBond['Maturity'].values[0]}` + '\n' +
+        `{bold}Coupon{/bold}     ${infoBond['Coupon'].values[0]}` + '\n' +
+        `{bold}Code{/bold}       ${infoBond['Code'].values[0]}` + '\n' +
+        `{bold}ISIN{/bold}       ${infoBond['ISIN'].values[0]}` + '\n\n' +
+        `{bold}Bid Price{/bold}  ${infoBond['Bid Price'].values[0]}` + '\n' +
+        `{bold}Ask Price{/bold}  ${infoBond['Ask Price'].values[0]}` + '\n' +
+        `{bold}Bid Rate{/bold}   ${infoBond['Bid Rate'].values[0]}` + '\n' +
+        `{bold}Ask Rate{/bold}   ${infoBond['Ask Rate'].values[0]}` + '\n\n' +
+        `{bold}Info{/bold}       ${infoBond['Info'].values[0]}` + '\n\n' +
+        `{bold}Objective{/bold}  ${infoBond['Objective'].values[0]}` + '\n\n' +
+        `{bold}Income{/bold}     ${infoBond['Income'].values[0]}`
     boxBonds.setContent(stringBond)
     screen.render()
 }
