@@ -1,19 +1,23 @@
 
 const puppeteer = require("puppeteer")
+const dfd = require("danfojs-node")
 
 
 function parseTreasuryTable(content) {
     const bondDataObj = content['response']['TrsrBdTradgList']
-    const bondDataArray = [
-        ['Index', 'Type', 'Name', 'Maturity', 'Coupon', 'Bid Price', 'Ask Price', 'Bid Rate', 'Ask Rate', 'ISIN', 'Code', 'Info', 'Bbjective', 'Income'],
+    const bondDataColumns = [
+        'Index', 'Type', 'Maturity', 'Name', 'Coupon',
+        'Bid Price', 'Ask Price', 'Bid Rate', 'Ask Rate',
+        'ISIN', 'Code', 'Info', 'Objective', 'Income'
     ]
+    const bondDataArray = []
     bondDataObj.forEach(
         (element, index, array) => {
             bondDataArray.push([
                 element['TrsrBd']['FinIndxs']['nm'],
                 element['TrsrBdType']['nm'],
-                element['TrsrBd']['nm'],
                 element['TrsrBd']['mtrtyDt'].slice(0, 10),
+                element['TrsrBd']['nm'],
                 element['TrsrBd']['semiAnulIntrstInd'] ? 'Y' : 'N',
                 element['TrsrBd']['untrRedVal'],
                 element['TrsrBd']['untrInvstmtVal'],
@@ -27,7 +31,9 @@ function parseTreasuryTable(content) {
             ])
         }
     )
-    return bondDataArray
+    const df = new dfd.DataFrame(bondDataArray, {columns: bondDataColumns})
+        .sortValues('Maturity').sortValues('Type').sortValues('Index')
+    return df
 }
 
 

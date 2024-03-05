@@ -23,6 +23,7 @@
   "dependencies": {
     "blessed": "^0.1.81",
     "blessed-contrib": "^4.11.0",
+    "danfojs-node": "^1.1.2",
     "puppeteer": "^22.3.0"
   }
 }
