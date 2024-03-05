@@ -35,9 +35,6 @@ async function updateTreasuryInfo() {
     const indexTable = tableBonds.rows.selected
     const infoBond = bondDataDF.iloc({rows: [indexTable]})
     const stringBond =
-        `Index      ${indexTable}` + '\n' +
-        `Sel        ${tableBonds.rows.selected}` + '\n' +
-        `Total      ${tableBonds.rows.items.length}` + '\n\n' +
         `Bond       ${infoBond['Type'].values[0]} ${infoBond['Maturity'].values[0]}` + '\n' +
         `Code       ${infoBond['Code'].values[0]}` + '\n' +
         `ISIN       ${infoBond['ISIN'].values[0]}` + '\n\n' +
