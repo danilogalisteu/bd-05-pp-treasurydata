@@ -3,6 +3,18 @@ const puppeteer = require("puppeteer")
 const dfd = require("danfojs-node")
 
 
+function parseMarketData(content) {
+    const marketDataObj = {
+        quoteTime: content['response']['TrsrBondMkt']['qtnDtTm'].replace('T', ' '),
+        openTime: content['response']['TrsrBondMkt']['opngDtTm'].replace('T', ' '),
+        closeTime: content['response']['TrsrBondMkt']['clsgDtTm'].replace('T', ' '),
+        statusCode: content['response']['TrsrBondMkt']['stsCd'],
+        status: content['response']['TrsrBondMkt']['sts'],
+    }
+    return marketDataObj
+}
+
+
 function parseTreasuryTable(content) {
     const bondDataObj = content['response']['TrsrBdTradgList']
     const bondDataColumns = [
@@ -54,14 +66,7 @@ async function getTreasuryTable() {
     await browser.close()
 
     const dataObj = JSON.parse(content)
-    const marketDataObj = {
-        quoteTime: dataObj['response']['TrsrBondMkt']['qtnDtTm'].replace('T', ' '),
-        openTime: dataObj['response']['TrsrBondMkt']['opngDtTm'].replace('T', ' '),
-        closeTime: dataObj['response']['TrsrBondMkt']['clsgDtTm'].replace('T', ' '),
-        statusCode: dataObj['response']['TrsrBondMkt']['stsCd'],
-        status: dataObj['response']['TrsrBondMkt']['sts'],
-    }
-    return [marketDataObj, parseTreasuryTable(dataObj)]
+    return [parseMarketData(dataObj), parseTreasuryTable(dataObj)]
 }
 
 
