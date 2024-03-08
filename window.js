@@ -62,7 +62,6 @@ async function showMainWindow() {
 
     const paramsTableBonds = {
         keys: true,
-        vi: true,
         fg: 'white',
         selectedFg: 'white',
         selectedBg: 'blue',
@@ -109,19 +108,20 @@ async function showMainWindow() {
 
     screen.render()
 
-    var msg = blessed.message({
+    let msg = blessed.message({
         parent: screen,
         top: 'center',
         left: 'center',
         height: 'shrink',
-        width: '50%',
+        width: '40%',
         align: 'center',
+        label: ' Keyboard shortcuts ',
         tags: true,
         hidden: true,
-        border:  {type: 'line', fg: "green"},
+        border:  {type: 'bg', fg: 'green', ch: '▓'},
     });
 
-    msg.display("Press UP and DOWN arrow keys to change lines, R to update treasury data, and Q or ESC or CTRL+C to exit the application", -1)
+    msg.display("\n\t∙ [↑] and [↓] arrow keys to change lines\n\t∙ [R] to update treasury data\n\t∙ [Q] or [Esc] or [Ctrl]+[C] to exit the application\n", -1)
 
     await updateTreasuryData()
 }
