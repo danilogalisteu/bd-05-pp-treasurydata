@@ -11,6 +11,7 @@ let tableBonds = {}
 let boxBonds = {}
 let boxMarket = {}
 
+
 async function updateTreasuryData() {
     [marketDataObj, bondDataDF] = await getTreasuryTable(true)
 
@@ -29,7 +30,10 @@ async function updateTreasuryData() {
         headers: tableDataDF.columns,
         data: tableDataDF.values,
     })
+
+    await updateTreasuryInfo()
 }
+
 
 async function updateTreasuryInfo() {
     const indexTable = tableBonds.rows.selected
@@ -94,16 +98,18 @@ async function showMainWindow() {
         if ((key.name == 'down') || (key.name == 'up')) {
             await updateTreasuryInfo()
         }
+        if (ch == 'r') {
+            await updateTreasuryData()
+        }
     });
 
     screen.key(['escape', 'q', 'C-c'], function(ch, key) {
         return process.exit(0);
     });
 
-    await updateTreasuryData()
-    await updateTreasuryInfo(0)
-
     screen.render()
+
+    await updateTreasuryData()
 }
 
 
