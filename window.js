@@ -109,6 +109,20 @@ async function showMainWindow() {
 
     screen.render()
 
+    var msg = blessed.message({
+        parent: screen,
+        top: 'center',
+        left: 'center',
+        height: 'shrink',
+        width: '50%',
+        align: 'center',
+        tags: true,
+        hidden: true,
+        border:  {type: 'line', fg: "green"},
+    });
+
+    msg.display("Press UP and DOWN arrow keys to change lines, R to update treasury data, and Q or ESC or CTRL+C to exit the application", -1)
+
     await updateTreasuryData()
 }
 
