@@ -29,6 +29,7 @@ to install all dependencies. The application depends on the following packages:
 * `puppeteer` for web scraping (requires Google Chrome available on the system);
 * `blessed`and `blessed-contrib` for the graphical user interface package; and
 * `danfojs-node` for data manipulation.
+
 Its tests depend on the `jest`package.
 
 Run the application with:
