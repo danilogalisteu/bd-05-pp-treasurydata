@@ -91,18 +91,8 @@ async function showMainWindow() {
     screen.append(tableBonds)
     screen.append(boxBonds)
     screen.append(boxMarket)
-    tableBonds.focus()
 
-    tableBonds.rows.on('keypress', async function(ch, key) {
-        if ((key.name == 'down') || (key.name == 'up')) {
-            await updateTreasuryInfo()
-        }
-        if (ch == 'r') {
-            await updateTreasuryData()
-        }
-    });
-
-    screen.key(['escape', 'q', 'C-c'], function(ch, key) {
+    screen.key([`escape`, 'C-c'], function(ch, key) {
         return process.exit(0);
     });
 
@@ -115,15 +105,27 @@ async function showMainWindow() {
         height: 'shrink',
         width: '40%',
         align: 'center',
-        label: ' Keyboard shortcuts ',
+        label: ' Main view ',
         tags: true,
         hidden: true,
         border:  {type: 'bg', fg: 'green', ch: '▓'},
     });
 
-    msg.display("\n\t∙ [↑] and [↓] arrow keys to change lines\n\t∙ [R] to update treasury data\n\t∙ [Q] or [Esc] or [Ctrl]+[C] to exit the application\n", -1)
+    msg.display("\n  Keyboard shortcuts:\n\n\t∙ [↑] and [↓] keys to move up and down the table\n\t∙ [Enter] to see extra detail on the selected bond\n\t∙ [R] to update treasury data\n\t∙ [Escape] or [Ctrl]+[C] to exit the application\n", -1)
 
     await updateTreasuryData()
+
+    tableBonds.rows.on('keypress', async function(ch, key) {
+        if ((key.name == 'down') || (key.name == 'up')) {
+            const indexTable = tableBonds.rows.selected
+            await updateTreasuryInfo(indexTable)
+        }
+        if (ch == 'r') {
+            await updateTreasuryData()
+        }
+    });
+
+    tableBonds.focus()
 }
 
 
