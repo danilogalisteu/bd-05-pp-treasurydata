@@ -31,12 +31,11 @@ async function updateTreasuryData() {
         data: tableDataDF.values,
     })
 
-    await updateTreasuryInfo()
+    await updateTreasuryInfo(0)
 }
 
 
-async function updateTreasuryInfo() {
-    const indexTable = tableBonds.rows.selected
+async function updateTreasuryInfo(indexTable) {
     const infoBond = bondDataDF.iloc({rows: [indexTable]})
     const stringBond =
         `{bold}Bond{/bold}       ${infoBond['Type'].values[0]} ${infoBond['Maturity'].values[0]}` + '\n' +
@@ -111,7 +110,7 @@ async function showMainWindow() {
         border:  {type: 'bg', fg: 'green', ch: '▓'},
     });
 
-    msg.display("\n  Keyboard shortcuts:\n\n\t∙ [↑] and [↓] keys to move up and down the table\n\t∙ [Enter] to see extra detail on the selected bond\n\t∙ [R] to update treasury data\n\t∙ [Escape] or [Ctrl]+[C] to exit the application\n", -1)
+    msg.display("\n  Keyboard shortcuts:\n\n\t∙ [↑] and [↓] keys to move up and down the table\n\t∙ [Enter] to see extra detail on the selected bond\n\t∙ [R] to update treasury data\n\t∙ [Escape] or [Ctrl]+[C] to exit the application\n\t∙ any key to dismiss this message\n", -1)
 
     await updateTreasuryData()
 
@@ -120,12 +119,49 @@ async function showMainWindow() {
             const indexTable = tableBonds.rows.selected
             await updateTreasuryInfo(indexTable)
         }
+        if (key.name == 'enter') {
+            const indexTable = tableBonds.rows.selected
+            screen.destroy()
+            await showDetailWindow(indexTable)
+        }
         if (ch == 'r') {
             await updateTreasuryData()
         }
     });
 
     tableBonds.focus()
+}
+
+
+async function showDetailWindow(indexTable) {
+    screen = blessed.screen()
+    screen.program.clear()
+    const grid = new contrib.grid({rows: 100, cols: 100, screen: screen})
+
+    screen.key(['escape'], async function(ch, key) {
+        await showMainWindow();
+    });
+
+    screen.key(['C-c'], function(ch, key) {
+        return process.exit(0);
+    });
+
+    screen.render()
+
+    let msg = blessed.message({
+        parent: screen,
+        top: 'center',
+        left: 'center',
+        height: 'shrink',
+        width: '40%',
+        align: 'center',
+        label: ' Detail view ',
+        tags: true,
+        hidden: true,
+        border:  {type: 'bg', fg: 'green', ch: '▓'},
+    });
+
+    msg.display("\n  Keyboard shortcuts:\n\n\t∙ [R] to update treasury data\n\t∙ [Escape] to return to the main view\n\t∙ [Ctrl]+[C] to exit the application\n\t∙ any key to dismiss this message\n", -1)
 }
 
 
