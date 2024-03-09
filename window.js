@@ -10,6 +10,8 @@ let bondDataDF = {}
 let tableBonds = {}
 let boxBonds = {}
 let boxMarket = {}
+let linePrices = {}
+let lineYields = {}
 
 
 async function updateTreasuryData() {
@@ -137,6 +139,26 @@ async function showDetailWindow(indexTable) {
     screen = blessed.screen()
     screen.program.clear()
     const grid = new contrib.grid({rows: 100, cols: 100, screen: screen})
+
+    const paramsLinePrices = {
+        style: {line: "yellow", text: "green", baseline: "black"},
+        xLabelPadding: 3,
+        xPadding: 5,
+        showLegend: true,
+        wholeNumbersOnly: false, //true=do not show fraction in y axis
+        label: 'Price History',
+    }
+    const paramsLineYields = {
+        style: {line: "yellow", text: "green", baseline: "black"},
+        xLabelPadding: 3,
+        xPadding: 5,
+        showLegend: true,
+        wholeNumbersOnly: false, //true=do not show fraction in y axis
+        label: 'Yield History',
+    }
+
+    linePrices = grid.set(0, 0, 50, 100, contrib.line, paramsLinePrices)
+    lineYields = grid.set(50, 0, 50, 100, contrib.line, paramsLineYields)
 
     screen.key(['escape'], async function(ch, key) {
         await showMainWindow();
