@@ -44,7 +44,7 @@ function parseTreasuryTable(content) {
         }
     )
     const df = new dfd.DataFrame(bondDataArray, {columns: bondDataColumns})
-        .sortValues('Maturity').sortValues('Type').sortValues('Index')
+        .sortValues('Maturity').sortValues('Type').sortValues('Index', {ascending: false})
     return df
 }
 
