@@ -44,7 +44,7 @@ function parseTreasuryTable(content) {
         }
     )
     const df = new dfd.DataFrame(bondDataArray, {columns: bondDataColumns})
-        .sortValues('Maturity').sortValues('Type').sortValues('Index')
+    .sortValues('Maturity').sortValues('Type').sortValues('Index')
     return df
 }
 
@@ -91,20 +91,22 @@ function parseTreasuryPriceHistory(content) {
 }
 
 
-async function getTreasuryPriceHistory(code, period=30) {
+async function getTreasuryPriceHistory(code) {
     const treasuryHistURL = 'https://www.tesourodireto.com.br/titulos/historico-de-precos-e-taxas.htm'
     const treasuryDataURL = `https://www.tesourodireto.com.br/b3/tesourodireto/pricesAndFeesHistory`
 
-    const browser = await puppeteer.launch({headless: true})
+    const browser = await puppeteer.launch({headless: false})
     const page = await browser.newPage()
     page.setViewport({width: 1600, height: 900})
 
     await page.goto(treasuryHistURL, {waitUntil: 'load'})
-    await page.click('div.td-form-select-input > div')
+    await page.click('div.td-container-inputs-radio > label:nth-child(2) > span')  // select sell prices
+    await page.click('#anyDays')  // select period: days30, days90, days365, anyDays
+    await page.click('div.td-form-select-input > div')  // open bond selection
 
-    const attr = await page.$$eval("#ul-list > li", el => el.map(x => x.getAttribute("data-codigo")));
+    const attr = await page.$$eval("#ul-list > li", el => el.map(x => String(x.getAttribute("data-codigo"))))
+    const itemPos = attr.indexOf(String(code))
     const items = await page.$$('#ul-list > li')
-    const itemPos = attr.indexOf(code.toString())
     const itemElement = items[itemPos]
 
     const [dataResponse] = await Promise.all([
