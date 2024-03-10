@@ -88,8 +88,7 @@ function parseTreasuryPriceHistory(content) {
     )
     const df = new dfd.DataFrame(priceHistoryArray, {columns: priceHistoryColumns})
         .sortValues('timeOpen')
-    
-    return df
+    return df.query(df['bid'].ne(0.0))
 }
 
 
