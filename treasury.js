@@ -44,7 +44,7 @@ function parseTreasuryTable(content) {
         }
     )
     const df = new dfd.DataFrame(bondDataArray, {columns: bondDataColumns})
-    .sortValues('Maturity').sortValues('Type').sortValues('Index')
+        .sortValues('Maturity').sortValues('Type').sortValues('Index')
     return df
 }
 
@@ -72,22 +72,24 @@ async function getTreasuryTable() {
 
 function parseTreasuryPriceHistory(content) {
     const priceHistoryObj = content['response']['TrsrBd']['PrcgLst']
-    const priceHistoryArray = [
-        ['timeOpen', 'timeClose', 'bid', 'ask', 'bidRate', 'askRate'],
-    ]
+    const priceHistoryColumns = ['timeOpen', 'timeClose', 'bid', 'ask', 'bidRate', 'askRate']
+    const priceHistoryArray = []
     priceHistoryObj.forEach(
         (element, index, array) => {
             priceHistoryArray.push([
-                element['TrsrBdMkt']['opngDtTm'],
-                element['TrsrBdMkt']['clsgDtTm'],
+                element['TrsrBdMkt']['opngDtTm'].slice(0, 10),
+                element['TrsrBdMkt']['clsgDtTm'].slice(0, 10),
                 element['untrRedVal'],
-                element['untrInvstmtVal'],
+                element['untrInvstmtVal'] == 0 ? null : element['untrInvstmtVal'],
                 element['anulRedRate'],
-                element['anulInvstmtRate'],
+                element['anulInvstmtRate'] == 0 ? null : element['anulInvstmtRate'],
             ])
         }
     )
-    return priceHistoryArray
+    const df = new dfd.DataFrame(priceHistoryArray, {columns: priceHistoryColumns})
+        .sortValues('timeOpen')
+    
+    return df
 }
 
 
