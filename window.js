@@ -135,6 +135,67 @@ async function showMainWindow() {
 }
 
 
+async function updateHistoryData(indexTable) {
+    const code = bondDataDF.iloc({rows: [indexTable]}).loc({columns: ['Code']}).values[0][0]
+    const historyDataDF = await getTreasuryPriceHistory(code)
+
+    const minBidPrice = historyDataDF['bid'].min()
+    const maxBidPrice = historyDataDF['bid'].max()
+    const minPrice = historyDataDF.loc({columns: ['bid', 'ask']}).min().min()
+    const maxPrice = historyDataDF.loc({columns: ['bid', 'ask']}).max().max()
+    const priceMinY = minPrice ? minPrice : minBidPrice
+    const priceMaxY = maxPrice ? maxPrice : maxBidPrice
+    const priceRangeY = priceMaxY - priceMinY
+    linePrices.options.minY = priceMinY - priceRangeY * 0.2
+    linePrices.options.maxY = priceMaxY + priceRangeY * 0.2
+
+    const dataBidPrice = historyDataDF.loc({columns: ['timeOpen', 'bid']}).dropNa(axis=1)
+    const dataAskPrice = historyDataDF.loc({columns: ['timeOpen', 'ask']}).dropNa(axis=1)
+
+    const seriesBidPrice = {
+        title: 'Bid Price',
+        x: dataBidPrice['timeOpen'].values,
+        y: dataBidPrice['bid'].values,
+        style: {line: 'green'},
+    }
+    const seriesAskPrice = {
+        title: 'Ask Price',
+        x: dataAskPrice['timeOpen'].values,
+        y: dataAskPrice['ask'].values,
+        style: {line: 'red'},
+    }
+    linePrices.setData([seriesBidPrice, seriesAskPrice])
+
+    const minBidYield = historyDataDF['bidRate'].min()
+    const maxBidYield = historyDataDF['bidRate'].max()
+    const minYield = historyDataDF.loc({columns: ['bidRate', 'askRate']}).min().min()
+    const maxYield = historyDataDF.loc({columns: ['bidRate', 'askRate']}).max().max()
+    const yieldMinY = minYield ? minYield : minBidYield
+    const yieldMaxY = maxYield ? maxYield : maxBidYield
+    const yieldRangeY = yieldMaxY - yieldMinY
+    lineYields.options.minY = yieldMinY - yieldRangeY * 0.2
+    lineYields.options.maxY = yieldMaxY + yieldRangeY * 0.2
+
+    const dataBidYield = historyDataDF.loc({columns: ['timeOpen', 'bidRate']}).dropNa(axis=1)
+    const dataAskYield = historyDataDF.loc({columns: ['timeOpen', 'askRate']}).dropNa(axis=1)
+    const seriesBidYield = {
+        title: 'Bid Yield',
+        x: dataBidYield['timeOpen'].values,
+        y: dataBidYield['bidRate'].values,
+        style: {line: 'green'},
+    }
+    const seriesAskYield = {
+        title: 'Ask Yield',
+        x: dataAskYield['timeOpen'].values,
+        y: dataAskYield['askRate'].values,
+        style: {line: 'red'},
+    }
+    lineYields.setData([seriesBidYield, seriesAskYield])
+
+    screen.render()
+}
+
+
 async function showDetailWindow(indexTable) {
     screen = blessed.screen()
     screen.program.clear()
@@ -187,6 +248,12 @@ async function showDetailWindow(indexTable) {
     });
 
     msg.display("\n  Keyboard shortcuts:\n\n\t∙ [R] to update history data\n\t∙ [Escape] to return to the main view\n\t∙ [Ctrl]+[C] to exit the application\n\t∙ any key to dismiss this message\n", -1)
+
+    await updateHistoryData(indexTable)
+
+    screen.key(['r'], async function(ch, key) {
+        await updateHistoryData(indexTable);
+    });
 }
 
 
