@@ -6,6 +6,7 @@ Personal project:
 # treasurydata
 
 This console application scrapes the Brazilian Treasury Direct website and shows a table with basic data about the available government bonds.
+For each bond, historical prices and yields can be retrieved and shown as line charts.
 
 ## Installation and use
 
@@ -27,7 +28,7 @@ npm install
 ```
 to install all dependencies. The application depends on the following packages:
 * `puppeteer` for web scraping (requires Google Chrome available on the system);
-* `blessed`and `blessed-contrib` for the graphical user interface package; and
+* `blessed`and `blessed-contrib` for the graphical user interface; and
 * `danfojs-node` for data manipulation.
 
 Its tests depend on the `jest`package.
