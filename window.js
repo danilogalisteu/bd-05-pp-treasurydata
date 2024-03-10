@@ -15,7 +15,7 @@ let lineYields = {}
 
 
 async function updateTreasuryData() {
-    [marketDataObj, bondDataDF] = await getTreasuryTable(true)
+    [marketDataObj, bondDataDF] = await getTreasuryTable()
 
     colorMarket = marketDataObj['status'] == 'Aberto' ? 'green' : 'red'
     stringMarket =
@@ -93,7 +93,7 @@ async function showMainWindow() {
     screen.append(boxBonds)
     screen.append(boxMarket)
 
-    screen.key([`escape`, 'C-c'], function(ch, key) {
+    screen.key(['escape', 'C-c'], function(ch, key) {
         return process.exit(0);
     });
 
@@ -140,21 +140,24 @@ async function showDetailWindow(indexTable) {
     screen.program.clear()
     const grid = new contrib.grid({rows: 100, cols: 100, screen: screen})
 
+    const bondItem = bondDataDF.iloc({rows: [indexTable]})
+    const name = `${bondItem['Type'].values[0]} ${bondItem['Maturity'].values[0]} [${bondItem['Name'].values[0]}]`
+
     const paramsLinePrices = {
-        style: {line: "yellow", text: "green", baseline: "black"},
+        style: {text: "white", baseline: "black"},
         xLabelPadding: 3,
         xPadding: 5,
         showLegend: true,
-        wholeNumbersOnly: false, //true=do not show fraction in y axis
-        label: 'Price History',
+        wholeNumbersOnly: false,
+        label: `Price History, ${name}`,
     }
     const paramsLineYields = {
-        style: {line: "yellow", text: "green", baseline: "black"},
+        style: {text: "white", baseline: "black"},
         xLabelPadding: 3,
         xPadding: 5,
         showLegend: true,
-        wholeNumbersOnly: false, //true=do not show fraction in y axis
-        label: 'Yield History',
+        wholeNumbersOnly: false,
+        label: `Yield History, ${name}`,
     }
 
     linePrices = grid.set(0, 0, 50, 100, contrib.line, paramsLinePrices)
@@ -183,7 +186,7 @@ async function showDetailWindow(indexTable) {
         border:  {type: 'bg', fg: 'green', ch: '▓'},
     });
 
-    msg.display("\n  Keyboard shortcuts:\n\n\t∙ [R] to update treasury data\n\t∙ [Escape] to return to the main view\n\t∙ [Ctrl]+[C] to exit the application\n\t∙ any key to dismiss this message\n", -1)
+    msg.display("\n  Keyboard shortcuts:\n\n\t∙ [R] to update history data\n\t∙ [Escape] to return to the main view\n\t∙ [Ctrl]+[C] to exit the application\n\t∙ any key to dismiss this message\n", -1)
 }
 
 
